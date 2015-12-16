@@ -24,40 +24,38 @@
 		<div id="grid" style="width: 100%; height: 400px;"></div>
 		<br>
 		
-		<form action="" method="post">
-			Chercher les Colis pour l'ID d'un user :
-			<input type="text" name="id_personne" id="id_pers" value=""/>
-			<input type="submit" onclick="showColisUser()"></input>
-		</form>
+		Chercher les Colis pour l'ID d'un user :
+		<input type="text" name="id_personne" id="id_pers" value=""/>
+		<button onclick="showColisUser();">Submit</button>
 		<br>
 		
 		<div id="grid_colis_user" style="width: 100%; height: 400px;"></div>
 		
 		<br>
 		
-		<form action="" method="post">
-			Céer une personne :<br>
-			Nom : <input type="text" id="id_nomC" value=""/><br>
-			Prenom : <input type="text" id="id_prenomC" value=""/><br>
-			Adresse : <input type="text" id="id_AddC" value=""/><br>
-			<input type="submit" onclick="createUser()"></input>
-		</form>
+		Céer une personne :<br>
+		Nom : <input type="text" id="id_nomC" value=""/><br>
+		Prenom : <input type="text" id="id_prenomC" value=""/><br>
+		Adresse : <input type="text" id="id_AddC" value=""/><br>
+		<button onclick="createUser();">Submit</button>
 		
 		<br>
 		
-		<form action="" method="post">
-			Céer un colis :<br>
-			Id de l'utilisateur : <input type="text" id="id_personneC" value=""/><br>
-			<input type="submit" onclick="createColis()"></input>
-		</form>
+		Céer un colis :<br>
+		Id de l'utilisateur : <input type="text" id="id_personneC" value=""/><br>
+		<button onclick="createColis();">Submit</button>
 		
 		<br>
 		
-		<form action="" method="post">
-			Delete un user et ces colis :<br>
-			Id de l'utilisateur : <input type="text" id="id_personneD" value=""/><br>
-			<input type="submit" onclick="deleteUserAndColis()"></input>
-		</form>
+		Delete un user et ces colis :<br>
+		Id de l'utilisateur : <input type="text" id="id_personneD" value=""/><br>
+		<button onclick="deleteUserAndColis();">Submit</button>
+		
+		<br>
+		
+		Delete un user :<br>
+		Id de l'utilisateur : <input type="text" id="id_personneDOnly" value=""/><br>
+		<button onclick="deleteUser();">Submit</button>
 		
 		<br>
 
@@ -67,7 +65,7 @@
 			var tab_w2;
 			var ready = 0;
 			var list_documents;
-			var id_user = 0;
+			var id_user = 1;
 			
 			
 			
@@ -116,17 +114,12 @@
 				console.log(w2ui['grid'].getChanges()); 
 				//w2alert('Changed records are displayed in the console');
 			}
-		</script>
-		<script type="text/javascript">
-			var tab_w2;
-			var ready = 0;
-			var list_documents;
-			var id_user = 0;
+			
 			
 			
 		
 			function getColisIfUser(){
-				var data = {"action":"getColisIfUser", "id_personne":1};
+				var data = {"action":"getColisIfUser", "id_personne":id_user};
 				$.ajax({
 					url: 'r.php',
 					data: data,
@@ -173,6 +166,7 @@
 			}
 			function showColisUser(){
 				id_user = document.getElementById("id_pers").value; 
+				
 			}
 			function createUser(){
 				console.log("Create personne");
@@ -198,15 +192,28 @@
 			}
 			function deleteUserAndColis(){
 				console.log("Delete user and colis");
-				var data = {"action":"personne", "id_personne":document.getElementById("id_personneD").value};
+				var data = {"action":"personneColis", "id_personne":document.getElementById("id_personneD").value};
 				$.ajax({
 					url: 'd.php',
 					data: data,
 					success: function(html){
-						console.log('fct create Colis ok');
+						console.log('fct delete user and colis ok');
 					}
 				});
 			}
+			function deleteUser(){
+			console.log("Delete user and colis");
+			console.log(document.getElementById("id_personneDOnly").value);
+				var data = {"action":"personne", "id_personne":document.getElementById("id_personneDOnly").value};
+				$.ajax({
+					url: 'd.php',
+					data: data,
+					success: function(html){
+						console.log('fct delete ok');
+					}
+				});
+			}
+			
 		</script>
 
 	</body>

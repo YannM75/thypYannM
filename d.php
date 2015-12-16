@@ -8,6 +8,9 @@ switch ($_GET["action"]) {
 	case "personne":
 		deletePersonne($_GET);
 		break;
+	case "personneColis":
+		deletePersonneColis($_GET);
+		break;
 	default:
 		;
 	break;
@@ -15,6 +18,19 @@ switch ($_GET["action"]) {
 
 
 function deletePersonne($data){
+	global $conn;
+	
+	$sql = "DELETE FROM personnes where ( id =".$data["id"].")";
+	//echo $sql;
+	if ($conn->query($sql) === TRUE) {
+	    echo "personne deleted successfully";
+	} else {
+	    echo "Error: " . $sql . "<br>" . $conn->error;
+	}
+	
+}
+
+function deletePersonneColis($data){
 	global $conn;
 	
 	$sql = "DELETE FROM personnes where ( id =".$data["id"].")";
