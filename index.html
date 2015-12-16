@@ -52,6 +52,14 @@
 		</form>
 		
 		<br>
+		
+		<form action="" method="post">
+			Delete un user et ces colis :<br>
+			Id de l'utilisateur : <input type="text" id="id_personneD" value=""/><br>
+			<input type="submit" onclick="deleteUserAndColis()"></input>
+		</form>
+		
+		<br>
 
 		<!-- <button class="btn" onclick="showChanged()">Get Changed</button> --> 
 
@@ -182,6 +190,17 @@
 				var data = {"action":"colis", "id_personne":document.getElementById("id_personneC").value};
 				$.ajax({
 					url: 'c.php',
+					data: data,
+					success: function(html){
+						console.log('fct create Colis ok');
+					}
+				});
+			}
+			function deleteUserAndColis(){
+				console.log("Delete user and colis");
+				var data = {"action":"personne", "id_personne":document.getElementById("id_personneD").value};
+				$.ajax({
+					url: 'd.php',
 					data: data,
 					success: function(html){
 						console.log('fct create Colis ok');

@@ -17,13 +17,21 @@ switch ($_GET["action"]) {
 function deletePersonne($data){
 	global $conn;
 	
-	$sql = "DELETE FROM personnes where ( id_perso =".$data["id"].")";
+	$sql = "DELETE FROM personnes where ( id =".$data["id"].")";
 	//echo $sql;
 	if ($conn->query($sql) === TRUE) {
 	    echo "personne deleted successfully";
+		$sql = "DELETE FROM colis where ( id_personne =".$data["id"].")";
+		//echo $sql;
+		if ($conn->query($sql) === TRUE) {
+			echo "personne deleted successfully";
+		} else {
+			echo "Error: " . $sql . "<br>" . $conn->error;
+		}
 	} else {
 	    echo "Error: " . $sql . "<br>" . $conn->error;
-	}	
+	}
+	
 }
 
 function deletecolis($data){
