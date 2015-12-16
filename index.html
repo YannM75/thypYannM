@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		
+		<link rel="stylesheet" type="text/css" href="http://w2ui.com/src/w2ui-1.4.2.min.css" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+		<script type="text/javascript" src="http://w2ui.com/src/w2ui-1.4.2.min.js"></script>
+        <title>THYP Yann MAHUET</title>
+
+    </head>
+	
+	<body>
+		<header>
+			<h1>Partiel</h1>
+			<h2>Professeur : Samuel Szoniecky</h2>
+			<h3>Etudiant : Yann Mahuet</h3>
+		</header>
+		<br>
+		
+		<h3>Personnes : </h3>
+
+		<div id="grid" style="width: 100%; height: 400px;"></div>
+		<br>
+		
+		<form action="" method="post">
+			Chercher les Colis pour l'ID d'un user :
+			<input type="text" name="id_personne" id="id_pers" value=""/>
+			<input type="submit" onclick="showColisUser()"></input>
+		</form>
+		<br>
+		
+		<div id="grid_colis_user" style="width: 100%; height: 400px;"></div>
+		
+		<br>
+		
+		<form action="" method="post">
+			Céer une personne :<br>
+			Nom : <input type="text" id="id_nomC" value=""/><br>
+			Prenom : <input type="text" id="id_prenomC" value=""/><br>
+			Adresse : <input type="text" id="id_AddC" value=""/><br>
+			<input type="submit" onclick="createUser()"></input>
+		</form>
+		
+		<br>
+		
+		<form action="" method="post">
+			Céer un colis :<br>
+			Id de l'utilisateur : <input type="text" id="id_personneC" value=""/><br>
+			<input type="submit" onclick="createColis()"></input>
+		</form>
+		
+		<br>
+
+		<!-- <button class="btn" onclick="showChanged()">Get Changed</button> --> 
+
+		<script type="text/javascript">
+			var tab_w2;
+			var ready = 0;
+			var list_documents;
+			var id_user = 0;
+			
+			
+			
+			function getAllUsers(){
+				var data = {"action":"getAllUsers"};
+				$.ajax({
+					url: 'r.php',
+					data: data,
+					success: function(html){
+						console.log('fct to get all personnes');
+						list_documents = JSON.parse(html);
+						prepareRecordsUsers();
+					}
+				});
+				
+			}
+			function prepareRecordsUsers(){
+				for (i = 0; i < list_documents.length; i++){
+					var tab_temp = list_documents[i];
+					w2ui['grid'].add({ recid: tab_temp[0], Nom: tab_temp[1], Prenom: tab_temp[2], Addresse: tab_temp[3]});
+				}
+			}
+
+			$(function () {
+				
+
+				$('#grid').w2grid({
+
+					name: 'grid', 
+					show: { 
+						toolbar: true,
+						footer: true,
+					},
+					columns: [                
+						{ field: 'recid', caption: 'ID', size: '250px', sortable: true, resizable: true },
+						{ field: 'Nom', caption: 'Nom', size: '250px', sortable: true, resizable: true, editable: { type: 'text' }},
+						{ field: 'Prenom', caption: 'Prénom', size: '250px', sortable: true, resizable: true, editable: { type: 'text' }},
+						{ field: 'Addresse', caption: 'Addresse', size: '250px', sortable: true, resizable: true, editable: { type: 'text' }},
+					],
+					
+				}); 
+
+				getAllUsers();			
+			});
+			function showChanged() {
+				console.log(w2ui['grid'].getChanges()); 
+				//w2alert('Changed records are displayed in the console');
+			}
+		</script>
+		<script type="text/javascript">
+			var tab_w2;
+			var ready = 0;
+			var list_documents;
+			var id_user = 0;
+			
+			
+		
+			function getColisIfUser(){
+				var data = {"action":"getColisIfUser", "id_personne":1};
+				$.ajax({
+					url: 'r.php',
+					data: data,
+					success: function(html){
+						console.log('fct to get all Colis for 1 user');
+						list_documents = JSON.parse(html);
+						console.log(list_documents);
+						prepareRecordsColisUser();
+					}
+				});
+				
+			}
+			function prepareRecordsColisUser(){
+				for (i = 0; i < list_documents.length; i++){
+					var tab_temp = list_documents[i];
+					w2ui['grid_colis_user'].add({ recid: tab_temp[0], Nom: tab_temp[1], Prenom: tab_temp[2], idColis: tab_temp[3]});
+				}
+			}
+
+			$(function () {
+				
+				$('#grid_colis_user').w2grid({
+
+					name: 'grid_colis_user', 
+					show: { 
+						toolbar: true,
+						footer: true,
+					},
+					columns: [                
+						{ field: 'recid', caption: 'ID', size: '250px', sortable: true, resizable: true },
+						{ field: 'Nom', caption: 'Nom', size: '250px', sortable: true, resizable: true, editable: { type: 'text' }},
+						{ field: 'Prenom', caption: 'Prénom', size: '250px', sortable: true, resizable: true, editable: { type: 'text' }},
+						{ field: 'idColis', caption: 'ID Colis', size: '250px', sortable: true, resizable: true},
+					],
+					
+					
+				}); 
+
+				getColisIfUser();				
+			});
+			function showChanged() {
+				console.log(w2ui['grid'].getChanges()); 
+				//w2alert('Changed records are displayed in the console');
+			}
+			function showColisUser(){
+				id_user = document.getElementById("id_pers").value; 
+			}
+			function createUser(){
+				console.log("Create personne");
+				var data = {"action":"personne", "nom":document.getElementById("id_nomC").value, "prenom":document.getElementById("id_prenomC").value, "adresse":document.getElementById("id_AddC").value};
+				$.ajax({
+					url: 'c.php',
+					data: data,
+					success: function(html){
+						console.log('fct create personne ok');
+					}
+				});
+			}
+			function createColis(){
+				console.log("Create colis");
+				var data = {"action":"colis", "id_personne":document.getElementById("id_personneC").value};
+				$.ajax({
+					url: 'c.php',
+					data: data,
+					success: function(html){
+						console.log('fct create Colis ok');
+					}
+				});
+			}
+		</script>
+
+	</body>
+</html>
